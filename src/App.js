@@ -7,7 +7,7 @@ import users from './data/users.js';
 
 const App = () => {
   const [searchInput, setSearchInput] = useState("");
-
+  const [sortInput, setSortInput] = useState("");
   // Filter users
   // if the search input includes those 3 letters as you type, it will show up.
   // fix case-sensitive
@@ -18,13 +18,32 @@ const App = () => {
     return lowerCaseName.includes(lowerCaseSearchInput);
   })
 
+  // by default, it shouldn't sort it.
+  // when you choose the dropdown option, it should sort it.
+  // we are sorting based on the sort input, using `name` every time.
+  if (sortInput){
+    filteredUsers.sort((a,b)=>{
+      if (a[sortInput] < b[sortInput]) {
+        return -1
+      };
+      if (a[sortInput] > b[sortInput]) {
+        return 1
+      };
+      return 0;
+    })
+  }
+
   let renderUsers = filteredUsers.map((user, index)=>{
     return <li key={index}>{user.name}</li>
   });
 
   const handleSearchInput = (e) => {
-    console.log(e.target.value)
-    setSearchInput(e.target.value)
+    // console.log(e.target.value);
+    setSearchInput(e.target.value);
+  }
+
+  const handleSortOnChange = (e) => {
+    setSortInput(e.target.value);
   }
 
   return (
@@ -39,10 +58,10 @@ const App = () => {
           onChange={handleSearchInput}
         />
         <label>Sort</label>
-        <select>
+        <select onChange={handleSortOnChange}>
           <option>--Sort--</option>
-          <option>Name</option>
-          <option>Currency</option>
+          <option value="name">Name</option>
+          <option value="currency">Currency</option>
         </select>
       </div>
       <ul>{renderUsers}</ul>
