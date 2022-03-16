@@ -21,8 +21,19 @@ const App = () => {
   // by default, it shouldn't sort it.
   // when you choose the dropdown option, it should sort it.
   // we are sorting based on the sort input, using `name` every time.
+  let preProcessing;
   if (sortInput){
-    filteredUsers.sort((a,b)=>{
+    // want to create a new array where currency is a float. (not a decimal)
+    // we are making currency a string every single time, and losing our `$` but now it's sorted.
+    preProcessing = filteredUsers.map((user)=>{
+      // let formattedCurrency = Number(String(user.currency).replace("$", ""));
+      let formattedCurrency = Number(String(user.currency).replace("$", ""));
+      user.currency = formattedCurrency;
+      return user;
+    })
+    console.log(preProcessing);
+
+    preProcessing.sort((a,b)=>{
       if (a[sortInput] < b[sortInput]) {
         return -1
       };
@@ -31,9 +42,12 @@ const App = () => {
       };
       return 0;
     })
+  } else {
+    // if no `sortInput`, set preProcessing to the default values to ovrride it
+    preProcessing = filteredUsers;
   }
 
-  let renderUsers = filteredUsers.map((user, index)=>{
+  let renderUsers = preProcessing.map((user, index)=>{
     return <li key={index}>{user.name} - {user.currency}</li>
   });
 
