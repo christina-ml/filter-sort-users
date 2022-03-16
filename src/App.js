@@ -1,26 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
+/* imagine the `users` data is coming from a database (doing a fetch request, getting data from the backend) */
 import users from './data/users.js';
-console.log(users);
+// console.log(users);
 
-function App() {
+const App = () => {
+  const [searchInput, setSearchInput] = useState("");
+
+  let renderUsers = users.map((user, index)=>{
+    return <li key={index}>{user.name}</li>
+  });
+
+  const handleSearchInput = (e) => {
+    console.log(e.target.value)
+    setSearchInput(e.target.value)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Users Filter Sort</h1>
+      <div>
+        <label htmlFor='search-name'>Search Name</label>
+        <input 
+          onChange={handleSearchInput}
+          value={searchInput}
+        />
+      </div>
+      <ul>{renderUsers}</ul>
     </div>
   );
 }
