@@ -18,22 +18,26 @@ const App = () => {
     return lowerCaseName.includes(lowerCaseSearchInput);
   })
 
-  // by default, it shouldn't sort it.
-  // when you choose the dropdown option, it should sort it.
-  // we are sorting based on the sort input, using `name` every time.
-  let preProcessing;
-  if (sortInput){
-    // want to create a new array where currency is a float. (not a decimal)
-    // we are making currency a string every single time, and losing our `$` but now it's sorted.
-    preProcessing = filteredUsers.map((user)=>{
-      // let formattedCurrency = Number(String(user.currency).replace("$", ""));
-      let formattedCurrency = Number(String(user.currency).replace("$", ""));
-      user.currency = formattedCurrency;
-      return user;
-    })
-    console.log(preProcessing);
+  /* 
+    by default, it shouldn't sort it.
+    when you choose the dropdown option, it should sort it.
+    we are sorting based on the sort input, using `name` every time.
 
+    want to create a new array where currency is a float. (not a decimal)
+    we are making currency a string every single time, and losing our `$` but now it's sorted.
+    Need the string to be a number for currency
+   */
+  let preProcessing = filteredUsers.map((user)=>{
+    // let formattedCurrency = Number(String(user.currency).replace("$", "")); <---- this works, but make it less "bleh"
+    let formattedCurrency = String(user.currency).replace(/\$/, "");
+    user.currency = Number(formattedCurrency);
+    return user;
+  })
+  // console.log("preProcessing:", preProcessing);
+
+  if (sortInput){
     preProcessing.sort((a,b)=>{
+      // console.log("sortInput:", a[sortInput], b[sortInput])
       if (a[sortInput] < b[sortInput]) {
         return -1
       };
@@ -48,7 +52,7 @@ const App = () => {
   }
 
   let renderUsers = preProcessing.map((user, index)=>{
-    return <li key={index}>{user.name} - {user.currency}</li>
+    return <li key={index}>{user.name} - ${user.currency.toFixed(2)}</li>
   });
 
   const handleSearchInput = (e) => {
