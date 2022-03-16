@@ -8,7 +8,17 @@ import users from './data/users.js';
 const App = () => {
   const [searchInput, setSearchInput] = useState("");
 
-  let renderUsers = users.map((user, index)=>{
+  // Filter users
+  // if the search input includes those 3 letters as you type, it will show up.
+  // fix case-sensitive
+  let filteredUsers = users.filter((user)=>{
+    console.log(user.name)
+    const lowerCaseName = user.name.toLowerCase();
+    const lowerCaseSearchInput = searchInput.toLowerCase();
+    return lowerCaseName.includes(lowerCaseSearchInput);
+  })
+
+  let renderUsers = filteredUsers.map((user, index)=>{
     return <li key={index}>{user.name}</li>
   });
 
@@ -21,11 +31,19 @@ const App = () => {
     <div>
       <h1>Users Filter Sort</h1>
       <div>
-        <label htmlFor='search-name'>Search Name</label>
+        <label htmlFor='search_input'>Search Name: </label>
         <input 
-          onChange={handleSearchInput}
+          id="search_input"
+          type="text"
           value={searchInput}
+          onChange={handleSearchInput}
         />
+        <label>Sort</label>
+        <select>
+          <option>--Sort--</option>
+          <option>Name</option>
+          <option>Currency</option>
+        </select>
       </div>
       <ul>{renderUsers}</ul>
     </div>
