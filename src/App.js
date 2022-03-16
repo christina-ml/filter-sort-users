@@ -34,7 +34,7 @@ const App = () => {
   }
 
   let renderUsers = filteredUsers.map((user, index)=>{
-    return <li key={index}>{user.name}</li>
+    return <li key={index}>{user.name} - {user.currency}</li>
   });
 
   const handleSearchInput = (e) => {
